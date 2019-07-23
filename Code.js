@@ -87,7 +87,7 @@ function createEventInSheet(calendar, sheet, numbering, round) {
     }
     var start = new Date(schedule);
     var end = new Date(start.getTime() + (1 * 60 * 60 * 1000));
-    var event = calendar.createEvent(title, start, end, {'description': tag});
+    var event = calendar.createEvent(title, start, end);
     event.setTag('spladdercal', tag);
     event.setTag('round', round);
     event.setTag('numbering', numbering);

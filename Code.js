@@ -66,6 +66,7 @@ function createEventInSheet(calendar, sheet, numbering, round) {
   Logger.log('Processing ' + sheet.getName() + ' ...');
 
   const values = sheet.getDataRange().getValues();
+  const tag = spladderTag(numbering, round);
 
   if (values.length < 1) {
     Logger.log('Sheet ' + sheet.getName() + ' is empty.');
@@ -78,10 +79,14 @@ function createEventInSheet(calendar, sheet, numbering, round) {
 
   for (var i = 1; i < values.length; i++) {
     var row = values[i];
-    var start = new Date(row[idx.scheduled_time]);
-    var end = new Date(start.getTime() + (1 * 60 * 60 * 1000));
-    var tag = spladderTag(numbering, round);
     var title = row[idx.alpha] + ' v.s. ' + row[idx.bravo] + ' ' + tag;
+    var schedule = row[idx.scheduled_time];
+    if (!schedule) {
+      Logger.log('Not scheduled yet: ' + title);
+      continue;
+    }
+    var start = new Date(schedule);
+    var end = new Date(start.getTime() + (1 * 60 * 60 * 1000));
     var event = calendar.createEvent(title, start, end, {'description': tag});
     event.setTag('spladdercal', tag);
     event.setTag('round', round);
